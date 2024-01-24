@@ -1,0 +1,7 @@
+sqlalchemy
+fastapi
+uvicorn
+databases
+python-multipart
+psycopg2-binary
+requests
