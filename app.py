@@ -1,7 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException, status, BackgroundTasks, Depends, File, UploadFile, Form, requests
 
-# import lib  for token bearer
-from fastapi.security import OAuth2PasswordBearer
 
 import json as json
 from fastapi.responses import JSONResponse
@@ -13,16 +11,13 @@ from Classifier import ApplyAI
 from models import *
 from database import SessionLocal, engine
 from modelclasses import *
-
 import os
+
 from IPLOCATOR import get_IP_location
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="https://platform.openai.com/docs/api-reference/introduction")
 
 def get_db():
     db = SessionLocal()
@@ -31,8 +26,6 @@ def get_db():
     finally:
         db.close()
 
-
-
 async def log_ip(IP, db: Session = Depends(get_db)):
     ip_as_string = str(IP)
     ip_log_entry = IP_logger(ipaddress=ip_as_string, requested_at=datetime.now())
@@ -40,7 +33,6 @@ async def log_ip(IP, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(ip_log_entry)
     return
-
 
 # Endpoint for new userEntry
 @app.post("/new_user", response_model=Saved_User)
@@ -87,8 +79,6 @@ async def get_user_record(uuid: UUID4, background_tasks: BackgroundTasks,request
     IP = IPvAnyAddress(request.client.host)
     background_tasks.add_task(log_ip, IP, db)
     IP_origin = get_IP_location(IP)
-
-
 
     try:
         user = db.query(UserRecord).filter(UserRecord.id == uuid).first()
@@ -149,8 +139,6 @@ def update_last_login(user_id: str, db, origin=None):
     user.last_IP_origin = origin
     db.commit()
     pass
-
-
 
 @app.post("/{uuid}/classify", response_model=None)
 async def Classify_Content(uuid: UUID4, CONTENT_STR:str, OPEN_AI_TOKEN: str ,request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
