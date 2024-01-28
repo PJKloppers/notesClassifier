@@ -5,7 +5,7 @@ import json
 
 
 class WebCleaner:
-    def __init__(self, url, classnames_to_remove=None):
+    def __init__(self, url, classnames_to_remove=['nav', 'footer', 'sidebar', 'header', 'menu', 'menu-bar', 'menu__bar','w3-bar', 'menu-bar__item', 'menu', 'menu__item','top__nav', 'top__nav__item', 'top__nav__list','subtopnav','w3-sidebar']):
         self.url = url
         self.classnames_to_remove = classnames_to_remove or []
         self.tables = []
@@ -29,6 +29,8 @@ class WebCleaner:
     def _remove_elements_by_class(self, soup):
         for class_name in self.classnames_to_remove:
             for element in soup.find_all(class_=class_name):
+                print(f"Removing element with class {class_name}")
+                print(element.get_text(separator=" ", strip=True))
                 element.extract()
 
     def clean_web_content(self):
