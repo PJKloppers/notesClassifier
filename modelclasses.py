@@ -48,6 +48,7 @@ class Classification(BaseModel):
     """
     folder: Optional[str]
     tags: Optional[TagList]
+    title: Optional[str]
 
 class Saved_User(UserEntry):
     """
