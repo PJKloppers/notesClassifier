@@ -107,5 +107,4 @@ if __name__ == '__main__':
     url = "https://www.w3schools.com/html/html_tables.asp"
     web_cleaner = WebCleaner(url)
     content = web_cleaner.clean_web_content()
-
     print(json.dumps(content, indent=4))
